@@ -1,0 +1,10 @@
+## LaTeX compile files
+*.aux
+*.fls
+*.log
+*.gz
+*.fdb_latexmk
+*.toc
+
+## Generated PDF files
+*.pdf
