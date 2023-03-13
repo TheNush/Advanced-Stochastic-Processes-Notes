@@ -5,6 +5,7 @@
 *.gz
 *.fdb_latexmk
 *.toc
+*.out
 
 ## Generated PDF files
 *.pdf
