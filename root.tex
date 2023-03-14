@@ -31,7 +31,9 @@
 \vspace{.25in}
 
 \section{Motivations for Measure Theoretic Perspective}
-Consider the following probability calculation: Let $W\sim U(0,1)$ be a uniformly distributed, continuous random variable in the range 0 to 1. Compute $\Pr[W=w\in \Q]$, that is, the probability that $w$ is rational.
+Consider the following probability calculation: Let $W\sim U(0,1)$ be a uniformly distributed, 
+continuous random variable in the range 0 to 1. Compute $\Pr[W=w\in \Q]$, that is, the 
+probability that $w$ is rational.
 The probability density function for a standard uniform distribution is given by $\phi(w)=1,0\le w\le1$ and zero otheriwise. 
 This can be expressed with indicator function notation as $\phi(w)=\mathbbm{1}_{(0,1)}(w)$.
 Given the density function, we may query the probability of the occurence of specific events.
@@ -39,26 +41,33 @@ For example, suppose we want to know the probability that $W$ is between 1/3 and
 This is simply given by the area under the density curve between these two points, and so
 $$\Pr[1/3<W<1/2]=\int_{1/3}^{1/2}\mathbbm{1}_{(0,1)}(w)dw=\int_{0}^{1}\mathbbm{1}_{(1/3,1/2)}(w)dw=\int_{0}^{1/3}0dw+\int_{1/3}^{1/2}1dw+\int_{1/2}^{1}0dw=w\Big|_{1/3}^{1/2}=1/6$$
 
-For our desired calculation, we simply need to compute the total area under the density curve given by rational values of $w$:
+For our desired calculation, we simply need to compute the total area under the density 
+curve given by rational values of $w$:
 $$\Pr[W=w\in\Q]=\int_{\Q}\mathbbm{1}_{(0,1)}(w)dw=\int_{0}^{1}\mathbbm{1}_{\Q}(w)dw$$
-Notice however that we cannot separate this integral into a finite sum of integrals to remove the indicator function, as the rationals are dense in the reals, and hence we must compute the integral directly.
+Notice however that we cannot separate this integral into a finite sum of integrals to 
+remove the indicator function, as the rationals are dense in the reals, and hence we must 
+compute the integral directly.
 This leads to a problem, however, which requires machinery from real analysis.
 Recall that the computation of a Riemann sum of a function $\phi$ over an interval $[a,b]$ is obtained from partitioning the region $[a,b]$ into slices.
 We approximate the area under $\phi$ between $a$ and $b$ by forming these slices into rectangles, whose areas are then summed.
 More precisely, we have the following definitions:
+
 \begin{defn}[Partition]
 \label{defn:partition}
 Let $a,b\in \R$ and suppose $a<b$. A partition of $[a,b]$ is a collection of intervals $P~=~\{[x_0,x_1],[x_1,x_2],\ldots,[x_{n-1},x_n]\}=\{[x_{k-1},x_{k}]\}_{k=1}^n$ where $a=x_0<x_1<x_2<\ldots<x_{n-1}<x_n=b$.
 \end{defn}
+
 \begin{defn}[Sampled Partition]
 \label{defn:samplepartition}
 Let $P=\{[x_{k-1},x_{k}]\}_{k=1}^n$ be a partition over $[a,b]$. If $t_k \in I_k=[x_{k-1},x_k]$ then we say $t_k$ is a sample of $I_k$, and the set of ordered pairs $\dot{P}=\{([x_{k-1},x_{k}],t_k)\}_{k=1}^n$ is a sampled partition of $[a,b]$.
 \end{defn}
+
 Without loss of generality, suppose $\phi$ is strictly positive over its whole domain.
 One can compute the summation of parts of a sampled partition, where each part $[x_{k-1},x_k]$ is bounded from below by the horizontal axis and from above by a horizontal line at a point $\phi(t_k)$, hence yielding a sum of areas of rectangles.
 Given a function $\phi$ and a sampled partition $\dot{P}$ over an interval $[a,b]$, the Riemann sum $S$ is given by 
 $$S(\phi,\dot{P})=\sum_{k=1}^n\phi(t_k)(x_k-x_{k-1})$$
 This brings us to the following critical definition:
+
 \begin{defn}[Riemann Integrability]
 \label{defn:riemann}
 A function $\phi:[a,b]\to \R$ is Riemann integrable if there exists $L\in \R$ such that for all $\epsilon>0$ there exists a $\delta >0$ such that for any sampled partition $\dot{P}$ that satisfies $||\dot{P}||~=~\max_{k\in\{1,\ldots,n\}}\{x_{k}-~x_{k-1}\}<~\delta$, it holds that $|S(\phi,\dot{P})-L|<\epsilon$.
@@ -123,7 +132,14 @@ $\mathcal{B}(\R) = [\R^{*}]$.
     $f \colon X \to Y$ be a map. $f$ is said to be measurable if and only if 
     for every $B \in \mathcal{B}$, 
     \[f^{-1}(B) = \{x \in X \colon f(x) \in B\} \in \mathcal{A}.\]
+    If $f$ satisfies the requirements of a function, then $f$ is commonly referred 
+    to as a measurable function. 
 \end{defn}
+A common abuse of notation depicts maps between two measurable (or measure) spaces 
+$(X,\mathcal{A})$ and $(Y, \mathcal{B})$ as 
+\[f \colon (X,\mathcal{A}) \to (Y,\mathcal{B}). \]
+We call this an abuse of notation as $f$ still only maps elements of $X$ to elements
+of $Y$ and does not make use of the $\sigma-$Algebras, $\mathcal{A}$ and $\mathcal{B}$. 
 
 Note that there are two components that contribute to a map between measurable spaces
 being measurable: (i) the choice of $\sigma$-Algebras $\mathcal{A}$ and $\mathcal{B}$,
@@ -171,6 +187,42 @@ denoted in Definition~\ref{defn:map-ind-SA} as $\mathbb{P}(Y)$.
 
 \subsection{Intuition}
 
-\section{Lebesque Measures}
+\section{Lebesgue Measure and Integral}
+\begin{defn}[Lebesgue Measure (in one-dimension)]
+    Given an interval $(a,b) \subseteq \R$, the Lebesgue measure, denoted $\mu_L((a,b))$, 
+    is defined to be the length of the interval, i.e., $\mu_L((a,b)) = b-a$. 
+\end{defn}
+Note that the above definition is naturally extended to higher dimensions. When the 
+Lebesgue measure is equipped to $n-$dimensional Euclidean space, the measure of a subset 
+$S \subseteq \R^{n}$ is corresponds to the $n-$dimensional variant of length applied to 
+the subset $S$. For example, when $n=2$, the Lebesgue measure corresponds to the area of 
+$S \subset \R^2$, whereas if $n=3$, the Lebesgue measure corresponds to the volume of $S
+\subset \R^3$. 
+
+Further, while the definition of the Lebesgue measure invovles open subsets of Euclidean 
+space, it is easy to extend this definition to closed subsets with the help of partitions
+(see Definition~\ref{defn:partition}). \dhanush{I'll come back and add more details if 
+necessary. } 
+
+\subsection{Construction of the Lebesgue Integral}
+Consider a measurable function $f \colon (\Omega, \mathcal{F}, \mu) \to (\R,\mathcal{B}(\R))$. 
+We consider varying forms of $X$ (in increasing complexity) and define the Lebesgue integral 
+of $X$ with respect to the measure $\mu$. 
+
+\emph{1. Indicator Functions:  X = $\mathbbm{1}_A$, for some $A \in \mathcal{F}$. }
+
+\[\int{X d\mu} = \mu(A). \]
+
+\emph{2. Simple Functions: $X = \sum_{i=1}^{n}\alpha_{i}\ind_{A_{i}}$, where $A_{i} \in \mathcal{F}$
+and $\alpha_{i} \in \R$, for all $i \in \{1,2,\dots,n\}$.} 
+
+\begin{align*}
+    \int{X d\mu} = & \sum_{i=1}^{n}\alpha_{i} \int{\ind_{A_{i}} d\mu} \\
+                 = & \sum_{i=1}^{n}\alpha_{i} \mu(A_{i}). 
+\end{align*}
+
+\emph{3. Positive Measurable Functions: $X \geq 0$. }
+
+\dhanush{Need to add figures at this point. }
 
 \end{document}
