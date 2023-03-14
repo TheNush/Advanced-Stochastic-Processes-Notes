@@ -18,7 +18,7 @@
 \newtheorem{rem}{Remark}
 \newtheorem{lem}{Lemma}
 \newtheorem{cor}{Corollary}
-
+\usepackage{bbm}
 
 \title{Advanced Stochastic Processes Seminar Notes}
 \author{AC, DG, JW, TC}
@@ -31,6 +31,44 @@
 \vspace{.25in}
 
 \section{Motivations for Measure Theoretic Perspective}
+Consider the following probability calculation: Let $W\sim U(0,1)$ be a uniformly distributed, continuous random variable in the range 0 to 1. Compute $\Pr[W=w\in \Q]$, that is, the probability that $w$ is rational.
+The probability density function for a standard uniform distribution is given by $\phi(w)=1,0\le w\le1$ and zero otheriwise. 
+This can be expressed with indicator function notation as $\phi(w)=\mathbbm{1}_{(0,1)}(w)$.
+Given the density function, we may query the probability of the occurence of specific events.
+For example, suppose we want to know the probability that $W$ is between 1/3 and 1/2.
+This is simply given by the area under the density curve between these two points, and so
+$$\Pr[1/3<W<1/2]=\int_{1/3}^{1/2}\mathbbm{1}_{(0,1)}(w)dw=\int_{0}^{1}\mathbbm{1}_{(1/3,1/2)}(w)dw=\int_{0}^{1/3}0dw+\int_{1/3}^{1/2}1dw+\int_{1/2}^{1}0dw=w\Big|_{1/3}^{1/2}=1/6$$
+
+For our desired calculation, we simply need to compute the total area under the density curve given by rational values of $w$:
+$$\Pr[W=w\in\Q]=\int_{\Q}\mathbbm{1}_{(0,1)}(w)dw=\int_{0}^{1}\mathbbm{1}_{\Q}(w)dw$$
+Notice however that we cannot separate this integral into a finite sum of integrals to remove the indicator function, as the rationals are dense in the reals, and hence we must compute the integral directly.
+This leads to a problem, however, which requires machinery from real analysis.
+Recall that the computation of a Riemann sum of a function $\phi$ over an interval $[a,b]$ is obtained from partitioning the region $[a,b]$ into slices.
+We approximate the area under $\phi$ between $a$ and $b$ by forming these slices into rectangles, whose areas are then summed.
+More precisely, we have the following definitions:
+\begin{defn}[Partition]
+\label{defn:partition}
+Let $a,b\in \R$ and suppose $a<b$. A partition of $[a,b]$ is a collection of intervals $P~=~\{[x_0,x_1],[x_1,x_2],\ldots,[x_{n-1},x_n]\}=\{[x_{k-1},x_{k}]\}_{k=1}^n$ where $a=x_0<x_1<x_2<\ldots<x_{n-1}<x_n=b$.
+\end{defn}
+\begin{defn}[Sampled Partition]
+\label{defn:samplepartition}
+Let $P=\{[x_{k-1},x_{k}]\}_{k=1}^n$ be a partition over $[a,b]$. If $t_k \in I_k=[x_{k-1},x_k]$ then we say $t_k$ is a sample of $I_k$, and the set of ordered pairs $\dot{P}=\{([x_{k-1},x_{k}],t_k)\}_{k=1}^n$ is a sampled partition of $[a,b]$.
+\end{defn}
+Without loss of generality, suppose $\phi$ is strictly positive over its whole domain.
+One can compute the summation of parts of a sampled partition, where each part $[x_{k-1},x_k]$ is bounded from below by the horizontal axis and from above by a horizontal line at a point $\phi(t_k)$, hence yielding a sum of areas of rectangles.
+Given a function $\phi$ and a sampled partition $\dot{P}$ over an interval $[a,b]$, the Riemann sum $S$ is given by 
+$$S(\phi,\dot{P})=\sum_{k=1}^n\phi(t_k)(x_k-x_{k-1})$$
+This brings us to the following critical definition:
+\begin{defn}[Riemann Integrability]
+\label{defn:riemann}
+A function $\phi:[a,b]\to \R$ is Riemann integrable if there exists $L\in \R$ such that for all $\epsilon>0$ there exists a $\delta >0$ such that for any sampled partition $\dot{P}$ that satisfies $||\dot{P}||~=~\max_{k\in\{1,\ldots,n\}}\{x_{k}-~x_{k-1}\}<~\delta$, it holds that $|S(\phi,\dot{P})-L|<\epsilon$.
+\end{defn}
+
+In other words, for any choice of sampled partition $\dot{P}$, $S(\phi,\dot{P})$ approaches $L$ as $n$ approaches infinity.
+Now consider again the density function $\phi(w)=\mathbbm{1}_{\Q}(w)$.
+Since the rational numbers are dense in the reals, no matter how granular we make a partition, we can always find either a rational or irrational value for $t_k$, and hence $\phi(t_k)$ can always be either 0 or 1. 
+Consequently, the limit of the Riemann sum is dependant on the choice of $t_k$, and $\mathbbm{1}_{\Q}(w)$ is therefore not Riemann integrable, meaning the expression $\int_{0}^{1}\mathbbm{1}_{\Q}(w)dw$ is not computable.
+This implies that heavier machinery is necessary to compute the required probability, and for this we build a measure-theoretic foundation.
 
 \section{Introduction}
 \begin{defn}[$\sigma$-Algebra]
@@ -60,9 +98,15 @@ same set $\Omega$ is also a $\sigma$-Algebra over $\Omega$ (verify as an exercis
 \end{defn}
 
 The following example will clarify Definition~\ref{defn:gen-SA}.
-\dhanush{Can someone add an example?} 
+Let $\Omega = \{1,2,3\}$ and $X=\{\{1\},\{1,2\},\{2,3\}\}$
+Now to satisfy Definition~\ref{defn:gen-SA}-1, we add $\Omega$ to $X$ and obtain $[X]\subseteq\{\{1\},\{1,2\},\{2,3\},\{1,2,3\}\}$.
+To satisfy Definition~\ref{defn:gen-SA}-2, we add the missing complements to obtain $[X]\subseteq\{\emptyset, \{1\},\{3\},\{1,2\},\{2,3\},\{1,2,3\}\}$.
+To satisfy Definition~\ref{defn:gen-SA}-3, we see that the union of the sequence $\{1\},\{3\},\emptyset,\emptyset,\ldots$ also belongs to $[X]$, as does the complement of this union. Hence we have $[X]= \{\emptyset, \{1\},\{2\},\{3\},\{1,2\},\{2,3\},\{1,3\},\{1,2,3\}\}=\mathcal{P}(\Omega)$.
+Note that the $\sigma$-algebra generated by a set $X$ need not be the power set of $\Omega$.
+For example, consider $\Omega=\{1,2,3\}$ and $X=\{\emptyset,\{1\},\{2,3\},\{1,2,3\}\}$.
+The reader may verify that $X=[X]$ in this case.
 
-An important generated $\sigma$-Algebra is the $Borel \sigma-Algebra$, denoted 
+An important generated $\sigma$-Algebra is the Borel $\sigma$-algebra, denoted 
 $\mathcal{B}(\R)$, and is defined over the extended real line, $\R^{*} = [-\infty,
 +\infty]$. It is generated by the set of all open sets in $\R^{*}$, i.e., 
 $\mathcal{B}(\R) = [\R^{*}]$. 
@@ -84,6 +128,20 @@ $\mathcal{B}(\R) = [\R^{*}]$.
 Note that there are two components that contribute to a map between measurable spaces
 being measurable: (i) the choice of $\sigma$-Algebras $\mathcal{A}$ and $\mathcal{B}$,
 and (ii) the map $f$ itself. 
+
+Example:\\ Let $X=Y=\{1,2,3\}$, \\$\mathcal{A}=\{\{1,2,3\},\{1,2\},\{3\},\{2\},\{1,3\},\{2,3\},\{1\},\emptyset\}$ \\ $\mathcal{B}=\{\{1,2,3\},\{2,3\},\{1\},\emptyset\}$ \\
+
+Define $f(1)=3,f(2)=2,f(3)=1$\\
+Consider each $E\in \mathcal{B}$ \\
+$E_1=\{1,2,3\},f(1)=3\in E_1,f(2)=2\in E_1,f(3)=1\in E_1$\\ $\implies f^{-1}(E_1)=\{1,2,3\}\in \mathcal{A}$ \checkmark\\
+
+$E_2=\{2,3\},f(1)=3\in E_2,f(2)=2\in E_2,f(3)=1\notin E_2$\\ $\implies f^{-1}(E_2)=\{1,2\}\in \mathcal{A}$ \checkmark\\
+
+$E_3=\{1\},f(1)=3\notin E_3,f(2)=2\notin E_3, f(3)=1\in E_3$\\ $\implies f^{-1}(E_3)=\{3\}\in \mathcal{A}$ \checkmark\\
+
+$E_4=\emptyset$\\ $\implies f^{-1}(E_4)=\emptyset\in \mathcal{A}$ \checkmark\\
+
+$\implies f$ is a measurable map. 
 
 \begin{defn}[Map-Induced $\sigma$-Algebra]
     \label{defn:map-ind-SA}
