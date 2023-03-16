@@ -79,7 +79,7 @@ Since the rational numbers are dense in the reals, no matter how granular we mak
 Consequently, the limit of the Riemann sum is dependant on the choice of $t_k$, and $\mathbbm{1}_{\Q}(w)$ is therefore not Riemann integrable, meaning the expression $\int_{0}^{1}\mathbbm{1}_{\Q}(w)dw$ is not computable.
 This implies that heavier machinery is necessary to compute the required probability, and for this we build a measure-theoretic foundation.
 
-\section{Introduction}
+\section{Measure Theoretic Definitions}
 \begin{defn}[$\sigma$-Algebra]
     \label{defn:SA}
     Let $\mathcal{F}$ be a collection of subsets of $\Omega$, for some set $\Omega$.
@@ -240,11 +240,11 @@ infinite number of rationals.
 
 \subsection{Measure Theoretic Probability Theory}
 
-\subsection{Intuition}
-Here we reinterpret the concepts described in the previous section through the lense of probability theory.
-We think of the set $\Omega$ as the set of all possible outcomes in a probability experiment. For example, if the experiment is to roll a 6-sided die then $\Omega=\{1,2,3,4,5,6\}$.
+Here we reinterpret the concepts described in the previous section through the lens of probability theory.
+We think of the set $\Omega$ as the set of all possible outcomes in a probability experiment. For example, if the experiment is to roll a 6-sided die then $\Omega$ is the set of all possible trajectories (i.e. outcomes) that the toss of the die can take.
 An event corresponds to a measurable set, i.e. any possible subset of the set of outcomes.
-Thus $\mathcal{F}$ is the set of all events.
+Thus $\mathcal{F}$ is the set of all events, and is given by subsets of trajectories.
+
 In probability theory, a measurable map is referred to as a random variable.
 We think of random variables as functions in the sense that they map outcomes to values.
 For example, consider an experiment where we flip a coin. 
@@ -252,7 +252,19 @@ Either the coin lands heads (denoted by value 1), or tails (denoted by value zer
 Let $X:\Omega\to\{0,1\}$ be the corresponding random variable.
 The domain of $X$ consists of all possible trajectories the coin can fly through the air. One can imagine how difficult this set would be to define, as it includes all possible ways the coin can tumble or spin before it lands.
 However, each trajectory corresponds to the coin either landing on heads or tails.
-In this case the measurable space being mapped to is 
+In this case the measurable space being mapped to is the labels $\Omega'=\{0,1\}$ coupled with the $\sigma$-algebra $\mathcal{F}'=\{\emptyset,\{0\},\{1\},\{0,1\}\}$.
+The first element of $\mathcal{F}'$ is $\emptyset$ and represents both the empty set itself and the intersection of $\{0\}$ and $\{1\}$.
+This corresponds to the events that the coin lands on both heads and tails, and the coin lands on neither heads nor tails.
+The second element represents the event that the coin lands on tails, the third element represents the event that the coin lands on heads, and the final element of $\mathcal{F}'$ represents the event that the coin lands on either heads or tails.
+
+We interpret a positive measure as a probability, which is a function that maps sets in $\mathcal{F}'$ to $[0,1]$.
+Instead of $\mu$, we denote this measure as $\Pr[\cdot]$.
+In the coin toss example we define, $\Pr[\emptyset]=0$, $\Pr[\{0\}]=\Pr[\{1\}]=1/2$ and $\Pr[\{0,1\}]=1$.
+The first probability is 0 since it is not possible for the coin to land on both heads and tails or neither, and the last probability is 1 since the coin is guaranteed to land on either heads or tails.
+Notice how this satisfies the probability of a measure, since for any countable non-overlapping sequence of subsets of $\mathcal{F}'$, the measure of the union of the sequence is equal to the sum of the measures of elements of the sequence. In this case
+$$\Pr[\{0\}\cup\{1\}\cup\emptyset]=\Pr[\{0,1\}]=1=1/2+1/2+0=\Pr[\{0\}]+\Pr[\{1\}]+\Pr[\emptyset]$$
+is one such example of a non-overlapping sequence, as the intersection of these sets is empty.
+Lastly, a measurable space equipped with a probability measure $(\Omega,\mathcal{F},\Pr)$ is referred to as a \emph{probability space}.
 
 \section{Lebesgue Measure and Integral}
 \label{sec:lebesgue}
